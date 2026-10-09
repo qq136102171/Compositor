@@ -655,7 +655,7 @@ extension EditorSession {
                     image = trimmed.image
                     placed = trimmed.transform
                 }
-                return (ImportedImage(image: image, thumbnail: try PixelAdjust.thumbnail(of: image), name: job.kind.rawValue), placed)
+                return (ImportedImage(image: image, thumbnail: try PixelAdjust.thumbnail(of: image), name: localizedUI(job.kind.rawValue)), placed)
             }.value
             let asset = made.asset
             guard let index = document?.layers.firstIndex(where: { $0.id == edit.layerID }),

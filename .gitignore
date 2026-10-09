@@ -22,3 +22,8 @@ xcuserdata/
 # Claude Code settings personal to this machine
 .claude/settings.local.json
 BUILD_PLAN.md
+# 汉化构建的产物
+build/
+Tools/SparkleLib/
+Tools/strings_inventory.json
+Tools/strings_*.txt

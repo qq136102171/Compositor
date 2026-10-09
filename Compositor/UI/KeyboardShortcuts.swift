@@ -111,10 +111,14 @@ struct ShortcutDefinition: Identifiable {
         result += [entry("Decrease brush hardness", "[", 8), entry("Increase brush hardness", "]", 8),
                    entry("Previous blend mode", "-", 8), entry("Next blend mode", "=", 8),
                    entry("Cycle shape kind", "u", 8)]
-        for digit in 0...9 { result.append(entry("Opacity digit \(digit) (type two for exact %)", String(digit))) }
+        for digit in 0...9 { result.append(entry(String(format: localizedUI("Opacity digit %d (type two for exact %%)"), digit), String(digit))) }
         for (direction, key) in [("Left", "\u{f702}"), ("Right", "\u{f703}"), ("Up", "\u{f700}"), ("Down", "\u{f701}")] {
-            result += [entry("Nudge \(direction) 1 px", key), entry("Nudge \(direction) 10 px", key, 8),
-                       entry("Move selected pixels \(direction) 1 px", key, 1), entry("Move selected pixels \(direction) 10 px", key, 9)]
+            // Composed through the templates, so the direction lands in the right place in any language.
+            let way = localizedUI(direction)
+            result += [entry(String(format: localizedUI("Nudge %@ 1 px"), way), key),
+                       entry(String(format: localizedUI("Nudge %@ 10 px"), way), key, 8),
+                       entry(String(format: localizedUI("Move selected pixels %@ 1 px"), way), key, 1),
+                       entry(String(format: localizedUI("Move selected pixels %@ 10 px"), way), key, 9)]
         }
         result.append(.init(title: "Finish editing text", group: "Text Editing", original: ShortcutChord("\r", 1)))
         for (title, key) in [("Decrease tracking", "\u{f702}"), ("Increase tracking", "\u{f703}"),
@@ -240,10 +244,10 @@ private struct KeyboardShortcutsSheet: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 6) {
                     ForEach(["Menus", "Canvas & Layers", "Text Editing"], id: \.self) { group in
-                        Text(group).font(.headline).padding(.top, 8)
+                        Text(localizedUI(group)).font(.headline).padding(.top, 8)
                         ForEach(ShortcutDefinition.all.filter { $0.group == group && (search.isEmpty || $0.title.localizedCaseInsensitiveContains(search)) }) { definition in
                             HStack {
-                                Text(definition.title)
+                                Text(localizedUI(definition.title))
                                 Spacer()
                                 ShortcutRecorder(chord: draft[definition.id] ?? definition.original,
                                     recording: recording == definition.id,
@@ -264,7 +268,7 @@ private struct KeyboardShortcutsSheet: View {
             }.frame(height: 465)
             // Only a conflict takes room here; an empty line left a wide gap above the buttons.
             if let problem = ShortcutSettings.problem(in: draft) {
-                Text(problem)
+                Text(localizedUI(problem))
                     .foregroundStyle(.orange).font(.callout).lineLimit(2)
                     .frame(height: 22, alignment: .topLeading)
             }

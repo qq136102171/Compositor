@@ -90,8 +90,8 @@ extension ProjectController {
         let alert = NSAlert()
         alert.messageText = "“\(session.projectURL?.lastPathComponent ?? "Untitled")” was changed on disk."
         alert.informativeText = "Another app changed this project. You can revert to the version on disk, losing your unsaved changes, or keep what you have."
-        alert.addButton(withTitle: "Revert")
-        alert.addButton(withTitle: "Keep Mine")
+        alert.addButton(withTitle: localizedUI("Revert"))
+        alert.addButton(withTitle: localizedUI("Keep Mine"))
         return await alert.beginSheetModal(for: window) == .alertFirstButtonReturn
     }
 }
